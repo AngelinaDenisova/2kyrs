@@ -1,0 +1,74 @@
+//1 запрашивает с клавиатуры два целых числа, и выводит на экран сумму данных чисел:
+using System;
+namespace ConsoleApp2
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("a=");
+            int a = int.Parse(Console.ReadLine());
+            Console.Write("b=");
+            int b = int.Parse(Console.ReadLine());
+            int sum = a + b;
+            Console.WriteLine($"{a}+{b}={sum}");
+        }
+    }
+}
+
+
+//2 запрашивает с клавиатуры два целых числа, и выводит на экран сумму данных чисел в прямом и обратном порядке:
+using System;
+
+namespace ConsoleApp2
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("a=");
+            int a = int.Parse(Console.ReadLine());
+            Console.Write("b=");
+            int b = int.Parse(Console.ReadLine());
+            Console.WriteLine($"{a}+{b}={b}+{a}");
+        }
+    }
+}
+//3 запрашивает с клавиатуры три целых числа, и выводит на экран сумму данных чисел:
+using System;
+namespace ConsoleApp2
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("a=");
+            int a = int.Parse(Console.ReadLine());
+            Console.Write("b=");
+            int b = int.Parse(Console.ReadLine());
+            Console.Write("c=");
+            int c = int.Parse(Console.ReadLine());
+            int sum = a + b + c;
+            Console.WriteLine($"{a}+{b}+{c}={sum}");
+        }
+    }
+}
+
+//4  запрашивает с клавиатуры два вещественных числа, и выводит на экран произведение данных чисел (вещественные числа выводятся с точностью до 1 знака после запятой):
+using System;
+
+namespace ConsoleApp2
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("a=");
+            double a = double.Parse(Console.ReadLine());
+            Console.Write("b=");
+            double b = double.Parse(Console.ReadLine());
+            double pr = a * b;
+            Console.WriteLine($"{a:F1}+{b:F1}={pr:F1}");
+        }
+    }
+}
