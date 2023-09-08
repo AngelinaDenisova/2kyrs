@@ -1,0 +1,18 @@
+//5 Написать программу, которая определяет:   наименьшую цифру в натуральном двухзначном числе;
+using System;
+
+namespace ConsoleApp1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Введите двузначное число: ");
+            int a = int.Parse(Console.ReadLine());
+            int k = a % 10;
+            int p = a/10;
+            int max = (k > p) ? p : k;
+            Console.WriteLine(max);
+        }
+    }
+}
