@@ -72,3 +72,11 @@ namespace ConsoleApp2
         }
     }
 }
+//5
+    /* double a, b, c;
+    Console.WriteLine("Enter a, b == ");
+    a=double.Parse(Console.ReadLine());
+    b=double.Parse(Console.ReadLine());
+    c=a/b;
+    Console.WriteLine(a + " / " + b + " = " + "{0:.###}",  c);
+  } */
