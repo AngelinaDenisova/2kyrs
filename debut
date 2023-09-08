@@ -80,3 +80,43 @@ namespace ConsoleApp2
     c=a/b;
     Console.WriteLine(a + " / " + b + " = " + "{0:.###}",  c);
   } */
+
+Конечно, вот пример программы на C#, которая определяет наименьшую цифру в натуральном двузначном числе:
+
+```csharp
+using System;
+
+namespace ConsoleApp2
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Введите двузначное число: ");
+            string userInput = Console.ReadLine();
+
+            if (userInput.Length != 2)
+            {
+                Console.WriteLine("Ошибка! Введено некорректное число.");
+                return; // завершаем программу
+            }
+
+            char firstDigit = userInput[0];
+            char secondDigit = userInput[1];
+
+            int firstNumber = int.Parse(firstDigit.ToString());
+            int secondNumber = int.Parse(secondDigit.ToString());
+
+            int minDigit = Math.Min(firstNumber, secondNumber);
+
+            Console.WriteLine($"Наименьшая цифра в числе {userInput} - {minDigit}");
+        }
+    }
+}
+```
+
+В этой программе мы сначала запрашиваем у пользователя ввод двузначного числа. Затем мы проверяем длину введенной строки и выводим ошибку, если число не является двузначным.
+
+Далее мы получаем первую и вторую цифры числа, преобразуя символы в числа с помощью метода `Parse` класса `int`. Затем мы используем функцию `Math.Min()` для нахождения наименьшей цифры из двух.
+
+В конце мы выводим результат на экран.
