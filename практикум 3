@@ -1,0 +1,25 @@
+//Вывести на экран: все целые числа из диапазона от А до В (АВ), оканчивающиеся на цифру Х или У;
+using System;
+namespace ConsoleApp2
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int a, b, x, y;
+            Console.Write("a=");
+            a = int.Parse(Console.ReadLine());
+            Console.Write("b=");
+            b = int.Parse(Console.ReadLine());
+            Console.Write("x=");
+            x = int.Parse(Console.ReadLine());
+            Console.Write("y=");
+            y = int.Parse(Console.ReadLine());
+            for (int i = a; i <= b; i++)
+            {
+                if ((i % 10 == x) || (i % 10 == y))
+                    Console.WriteLine(i);
+            }
+        }
+    }
+}
