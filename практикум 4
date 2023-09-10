@@ -1,0 +1,23 @@
+//Для заданного натурального числа N вывести на экран все делители кратные целым числам С и D одновременно;
+using System;
+namespace ConsoleApp2
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int n,c,d;
+            Console.Write("n=");
+            n = int.Parse(Console.ReadLine());
+            Console.Write("c=");
+            c = int.Parse(Console.ReadLine());
+            Console.Write("d=");
+            d = int.Parse(Console.ReadLine());
+            for (int i = 1; i <= n; i++)
+            {
+                if ((n % i == 0) && (i % c == 0) && (i % d == 0))
+                    Console.WriteLine(i);
+            }
+        }
+    }
+}
