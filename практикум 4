@@ -21,3 +21,31 @@ namespace ConsoleApp2
         }
     }
 }
+
+
+//2 вариант
+using System;
+namespace ConsoleApp2
+{
+    class Program
+    {
+        static void Main()
+        {
+            int n, c, d;
+            Console.Write("n=");
+            n = int.Parse(Console.ReadLine());
+            Console.Write("c=");
+            c = int.Parse(Console.ReadLine());
+            Console.Write("d=");
+            d = int.Parse(Console.ReadLine());
+            for (int i = Math.Max(c,d); i <= n; i++)
+            {
+                if (i % c == 0 && i % d == 0)
+                {
+                    if (n % i == 0)
+                        Console.WriteLine(i);
+                }
+            }
+        }
+    }
+}
