@@ -1,0 +1,78 @@
+using System;
+namespace ConsoleApp2
+{
+    class Program
+    {
+
+        static int Method(int n) //Разработать метод, который для заданного натурального числа N возвращает сумму его нечетных цифр
+        {
+            int oddSum = 0;
+            while (n != 0)
+            {
+                int num = n % 10;
+                if (num % 2 != 0) oddSum += num;
+                n /= 10;
+            }
+            return oddSum;
+        }
+
+        public static void Method1(int a, int b) //для каждого целого числа на отрезке [a,b] вывести на экран сумму его нечетных цифр
+        {
+            Console.WriteLine("Суммы нечетных цифр чисел из диапазона: ");
+            for (int i = a; i <= b; i++)
+                Console.WriteLine(Method(i));
+
+        }
+
+        public static void Method2(int a, int b, int c) //вывести на экран только те целые числа отрезка [a,b], у которых сумма нечетных цифр числа равна заданному значению C
+        {
+            Console.WriteLine("Числа, у которых сумма цифр равна с: ");
+            for (int i = a; i <= b; i++)
+                if (Method(i) == c)
+                    Console.Write(i);
+
+        }
+
+        public static void Method3(int a, int b) //вывести на экран только те целые числа отрезка [a,b], у которых сумма нечетных цифр является простым числом
+        {
+            Console.WriteLine("Числа, у которых сумма нечетных цифр - простое число: ");
+            for (int i = a; i <= b; i++)
+                if (IsPrime(Method(i)))
+                    Console.WriteLine(i);
+        }
+
+        public static void Method4(int A) //для заданного числа А вывести на экран ближайшее следующее по отношению к нему число, сумма нечетных цифр которого равна сумме нечетных цифр числа А
+        {
+            Console.WriteLine("ближайшее к А число, у которого сумма нечет. равна сумме нечет. А: ");
+            int oddSumA = Method(A);
+            for (int i = A + 1; ; i++)
+            {
+                if (Method(i) == oddSumA)
+                {
+                    Console.WriteLine(i);
+                    break;
+                }
+            }
+        }
+        public static bool IsPrime(int n) //check for prime number
+        {
+            for (int i = 2; i < n / 2; i++)
+                if (n % i == 0) return false;
+            return true;
+        }
+        static void Main(string[] args)
+        {
+            Console.Write("a=");
+            int a = int.Parse(Console.ReadLine());
+            Console.Write("b=");
+            int b = int.Parse(Console.ReadLine());
+            Method1(a, b); //a
+            Console.Write("c=");
+            int c = int.Parse(Console.ReadLine());
+            Method2(a, b, c); // б
+            Method3(a, b);//в
+            Method4(a);//г
+        }
+    }
+
+}
