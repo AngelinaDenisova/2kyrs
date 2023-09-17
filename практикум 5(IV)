@@ -1,0 +1,33 @@
+//Дано натуральное число n. Разработать рекурсивный метод для вывода на экран последовательности чисел:
+using System;
+namespace ConsoleApp2
+    {
+    class Program
+    {
+        static void Stroka(int n) //вспомогательный метод вывода на экран строки из n цифр
+        {
+            for (int i = n; i >= 1; --i)
+            {
+                Console.Write(i);
+                Console.Write(" ");
+            }
+            Console.WriteLine();
+        }
+        static void F_Rec(int n, int i) //рекурсивный метод
+        {
+            if (i <= n) //если номер текущей строки не больше номера последней строки, то
+            {
+                Stroka(i); //выводим i цифр в текущей строке и
+                F_Rec(n, i + 1); //переходим к формированию следующей строки
+            }
+        }
+        static void Main()
+        {
+            Console.Write("n=");
+            int n = int.Parse(Console.ReadLine());
+            Console.WriteLine("\nРекурсивный вызов:");
+            const int i = 1; // определяет номер текущей строки и количество цифр в ней
+            F_Rec(n, i);
+        }
+    }
+}
