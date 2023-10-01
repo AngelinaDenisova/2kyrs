@@ -1,0 +1,81 @@
+using System;
+namespace ConsoleApp3
+{
+    class Program
+    {
+        static void Main()
+        {
+            Console.Write("Введите размерность массива: ");
+            int n = int.Parse(Console.ReadLine());
+
+            int[,] array = new int[n, n];
+
+            // Ввод элементов массива
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    Console.Write($"array[{i}, {j}] = ");
+                    array[i, j] = int.Parse(Console.ReadLine());
+                }
+            }
+            // Проверка наличия нулей в каждой строке
+            bool[] hasZero = new bool[n];
+            for (int i = 0; i < n; i++)
+            {
+                hasZero[i] = false;
+                for (int j = 0; j < n; j++)
+                {
+                    if (array[i, j] == 0)
+                    {
+                        hasZero[i] = true;
+                        break;
+                    }
+                }
+            }
+            // Вставка строки из нулей после строк без нулей
+            int[,] resultArray = new int[n + CountZeros(hasZero), n];
+            int rowIndex = 0;
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    resultArray[rowIndex, j] = array[i, j];
+                }
+                rowIndex++;
+
+                if (!hasZero[i])
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        resultArray[rowIndex, j] = 0;
+                    }
+                    rowIndex++;
+                }
+            }
+
+            // Вывод результирующего массива
+            Console.WriteLine("Результирующий массив:");
+            for (int i = 0; i < n + CountZeros(hasZero); i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    Console.Write(resultArray[i, j] + " ");
+                }
+                Console.WriteLine();
+            }
+        }
+        static int CountZeros(bool[] hasZero)
+        {
+            int count = 0;
+            foreach (bool flag in hasZero)
+            {
+                if (!flag)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+    }
+}
