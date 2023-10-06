@@ -1,0 +1,36 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp5
+{
+    class Program
+    {
+    static void Main()
+    {
+        Console.WriteLine("Введите текстовое сообщение:");
+        string message = Console.ReadLine();
+        Console.WriteLine("Введите символ для фильтрации:");
+        char filterCharacter = char.Parse(Console.ReadLine());
+        // Разделение строки на слова с использованием пробелов и знаков препинания в качестве разделителей
+        string[] words = message.Split(new char[] { ' ', ',', '.', ';', ':', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
+        // Создание нового списка для хранения отфильтрованных слов
+        System.Collections.Generic.List<string> filteredWords = new System.Collections.Generic.List<string>();
+        // Фильтрация слов и добавление их в отфильтрованный список
+        foreach (string word in words)
+        {
+            if (!word.EndsWith(filterCharacter.ToString()))
+            {
+                filteredWords.Add(word);
+            }
+        }
+        // Построение обновленного текстового сообщения
+        string updatedMessage = string.Join(" ", filteredWords);
+        // Вывод обновленного сообщения
+        Console.WriteLine("Обновленное сообщение:");
+        Console.WriteLine(updatedMessage);
+    }
+}
+}
