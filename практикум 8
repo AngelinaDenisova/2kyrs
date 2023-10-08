@@ -1,3 +1,4 @@
+//1 вариант (со списком)
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,4 +34,51 @@ namespace ConsoleApp5
         Console.WriteLine(updatedMessage);
     }
 }
+}
+
+//2 вариант (преобразования к массиву строк)
+using System;
+using System.Text;
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("Введите строку: ");
+        StringBuilder a = new StringBuilder(Console.ReadLine());
+        Console.WriteLine("Введите символ: ");
+        char sumb = char.Parse(Console.ReadLine());
+        
+        for (int i = 0; i < a.Length;) //убираем знаки пунктуации из строки
+        {
+            if (char.IsPunctuation(a[i]))
+            {
+                a.Remove(i, 1);
+            }
+            else
+            {
+                ++i;
+            }
+        }
+        
+        ////преобразуем объект StringBuilder к типу string, и разбиваем его на массив слов
+        string[] s = a.ToString().Split(' ');
+        Console.WriteLine("Строка после удаления: ");
+        for (int i = 0; i < s.Length;) 
+        {
+            if (s[i][s[i].Length - 1] == sumb) //если последний символ слова равен заданному
+            {
+                Array.Copy(s, i + 1, s, i, s.Length - i - 1); //сдвигаем эл-ты влево на 1 позицию, начиная с i+1
+                Array.Resize(ref s, s.Length - 1); //изменяем размер массива, удаляя последний элемент
+            }
+            else
+            {
+                ++i;
+            }
+        }
+        foreach (string str in s)
+        {
+            Console.Write(str+ " ");
+        }
+    }
 }
