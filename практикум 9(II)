@@ -1,0 +1,35 @@
+// Даны два файла с числами. Получить новый файл, каждый компонент которого равен наибольшему из соответствующих компонентов заданных файлов (количество
+//компонентов в исходных файлах одинаковое).
+using System;
+using System.IO;
+namespace ConsoleApp4
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string inputFile1 = "C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\1.txt"; // Путь к первому входному файлу
+            string inputFile2 = "C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\2.txt"; // Путь ко второму входному файлу
+            string outputFile = "C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\test.txt"; // Путь к выходному файлу
+
+            using (StreamReader reader1 = new StreamReader(inputFile1))
+            using (StreamReader reader2 = new StreamReader(inputFile2))
+            using (StreamWriter writer = new StreamWriter(outputFile))
+            {
+                string line1, line2;
+
+                while ((line1 = reader1.ReadLine()) != null && (line2 = reader2.ReadLine()) != null)
+                {
+                    int number1 = int.Parse(line1);
+                    int number2 = int.Parse(line2);
+
+                    int maximum = Math.Max(number1, number2);
+
+                    writer.WriteLine(maximum);
+                }
+            }
+
+            Console.WriteLine("Файл с максимальными компонентами создан.");
+        }
+    }
+}
