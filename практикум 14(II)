@@ -3,3 +3,68 @@
 //Для хранения данных внутри программы организовать массив структур. Сортировку данных реализовать, реализуя метод CompareTo(T) стандартного интерфейса IComparable<in T>
 //На основе данных входного файла составить список сотрудников учреждения, включив следующие данные: ФИО, год принятия на работу, должность, зарплата, рабочий стаж.
 // Вывести в новый файл информацию о сотрудниках, имеющих зарплату ниже определенного уровня, отсортировав их по рабочему стажу
+using System;
+using System.IO;
+
+// Структура описывающая сотрудника
+struct Employee : IComparable<Employee>
+{
+    public string FullName;
+    public int HireYear;
+    public string Position;
+    public decimal Salary;
+    public int WorkExperience;
+
+    public int CompareTo(Employee other)
+    {
+        // Сортировка по рабочему стажу (WorkExperience) по возрастанию
+        return WorkExperience.CompareTo(other.WorkExperience);
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        // Определенный уровень зарплаты
+        decimal salaryThreshold = 50000;
+        
+        // Массив для хранения данных о сотрудниках
+        Employee[] employees;
+        
+        // Чтение данных из файла
+        using (StreamReader reader = new StreamReader("input.txt"))
+        {
+            string line;
+            int count = int.Parse(reader.ReadLine()); // Первая строка файла содержит количество сотрудников
+            employees = new Employee[count];
+            
+            for (int i = 0; i < count; i++)
+            {
+                line = reader.ReadLine();
+                string[] splitLine = line.Split(';');
+                
+                employees[i].FullName = splitLine[0];
+                employees[i].HireYear = int.Parse(splitLine[1]);
+                employees[i].Position = splitLine[2];
+                employees[i].Salary = decimal.Parse(splitLine[3]);
+                employees[i].WorkExperience = int.Parse(splitLine[4]);
+            }
+        }
+        
+        // Сортировка сотрудников по рабочему стажу
+        Array.Sort(employees);
+        
+        // Запись информации о сотрудниках с зарплатой ниже определенного уровня в файл
+        using (StreamWriter writer = new StreamWriter("output.txt"))
+        {
+            foreach (var employee in employees)
+            {
+                if (employee.Salary < salaryThreshold)
+                {
+                    writer.WriteLine($"ФИО: {employee.FullName}, Год принятия на работу: {employee.HireYear}, Должность: {employee.Position}, Зарплата: {employee.Salary}, Рабочий стаж: {employee.WorkExperience}");
+                }
+            }
+        }
+    }
+}
