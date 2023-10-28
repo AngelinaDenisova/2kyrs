@@ -2,96 +2,96 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-
-struct Point
+namespace ConsoleApp5
 {
-    public double X;
-    public double Y;
-
-    public Point(double x, double y)
+    //// Структура Point для хранения координат точек на плоскости
+    struct Point
     {
-        X = x;
-        Y = y;
+        public double X;
+        public double Y;
+
+        public Point(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
     }
 
-    public static List<Point> ReadPointsFromFile(string inputFile)
+    class Program
     {
-        List<Point> points = new List<Point>();
-
-        using (StreamReader reader = new StreamReader(inputFile))
+        static void Main()
         {
-            while (!reader.EndOfStream)
-            {
-                string line = reader.ReadLine();
-                string[] coordinates = line.Split(' ');
+            string inputFile = "C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\points.txt";
+            string outputFile = "C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\result.txt";
 
-                if (coordinates.Length == 2 && double.TryParse(coordinates[0], out double x) &&
-                    double.TryParse(coordinates[1], out double y))
+            List<Point> points = ReadPointsFromFile(inputFile); //// Считываем точки из файла в список
+            if (points.Count < 2)
+            {
+                Console.WriteLine("Недостаточно точек в файле.");
+                return;
+            }
+
+            Tuple<Point, Point> result = FindFarthestPoints(points);
+            WriteResultToFile(outputFile, result.Item1, result.Item2);
+
+            Console.WriteLine("Две самые дальние точки были найдены и сохранены в файл result");
+        }
+
+        static List<Point> ReadPointsFromFile(string inputFile) // // Функция для чтения точек из файла
+        {
+            List<Point> points = new List<Point>();
+
+            using (StreamReader reader = new StreamReader(inputFile))
+            {
+                while (!reader.EndOfStream)
                 {
-                    points.Add(new Point(x, y));
+                    string line = reader.ReadLine(); //// Считываем строку из файла.
+                    string[] coordinates = line.Split(' '); ///Разделяем строку на координаты x и y по пробелу
+                    // Проверяем, что в строке есть две координаты и они успешно распарсились в числа
+                    if (coordinates.Length == 2 && double.TryParse(coordinates[0], out double x) && double.TryParse(coordinates[1], out double y))
+                        points.Add(new Point(x, y)); // Создаем новую точку и добавляем ее в список точек.
                 }
             }
+
+            return points; // Возвращаем список точек
         }
-
-        return points;
-    }
-
-    public static Tuple<Point, Point> FindFarthestPoints(List<Point> points)
-    {
-        double maxDistance = 0;
-        Tuple<Point, Point> result = null;
-
-        for (int i = 0; i < points.Count; i++)
+        // Функция для поиска двух наиболее удаленных точек.
+        static Tuple<Point, Point> FindFarthestPoints(List<Point> points)
         {
-            for (int j = i + 1; j < points.Count; j++)
-            {
-                double distance = CalculateDistance(points[i], points[j]);
+            double maxDistance = 0; // Максимальное расстояние между точками.
+            Tuple<Point, Point> result = null; // Переменная для хранения результата.
 
-                if (distance > maxDistance)
+            for (int i = 0; i < points.Count; i++)
+            {
+                for (int j = i + 1; j < points.Count; j++)
                 {
-                    maxDistance = distance;
-                    result = Tuple.Create(points[i], points[j]);
+                    double distance = CalculateDistance(points[i], points[j]); // Вычисляем расстояние между двумя точками.
+
+                    if (distance > maxDistance)
+                    {
+                        maxDistance = distance;
+                        result = Tuple.Create(points[i], points[j]); /// Обновляем результат с новыми точками.
+                    }
                 }
             }
+
+            return result;
         }
 
-        return result;
-    }
-
-    private static double CalculateDistance(Point p1, Point p2)
-    {
-        double dx = p1.X - p2.X;
-        double dy = p1.Y - p2.Y;
-        return Math.Sqrt(dx * dx + dy * dy);
-    }
-
-    public static void WriteResultToFile(string outputFile, Point p1, Point p2)
-    {
-        using (StreamWriter writer = new StreamWriter(outputFile))
+        static double CalculateDistance(Point p1, Point p2) //   // Функция для вычисления расстояния между двумя точками
         {
-            writer.WriteLine($"Point 1: ({p1.X}, {p1.Y})");
-            writer.WriteLine($"Point 2: ({p2.X}, {p2.Y})");
+            double dx = p1.X - p2.X;
+            double dy = p1.Y - p2.Y;
+            return Math.Sqrt(dx * dx + dy * dy);
         }
-    }
-}
 
-class Program
-{
-    static void Main()
-    {
-        string inputFile = "points.txt";
-        string outputFile = "result.txt";
-
-        List<Point> points = Point.ReadPointsFromFile(inputFile);
-        if (points.Count < 2)
+        static void WriteResultToFile(string outputFile, Point p1, Point p2)
         {
-            Console.WriteLine("Not enough points in the file.");
-            return;
+            using (StreamWriter writer = new StreamWriter(outputFile))
+            {
+                writer.WriteLine($"Точка 1: ({p1.X}, {p1.Y})");
+                writer.WriteLine($"Точка 2: ({p2.X}, {p2.Y})");
+            }
         }
-
-        Tuple<Point, Point> result = Point.FindFarthestPoints(points);
-        Point.WriteResultToFile(outputFile, result.Item1, result.Item2);
-
-        Console.WriteLine("The two farthest points have been found and saved to a file.");
     }
 }
