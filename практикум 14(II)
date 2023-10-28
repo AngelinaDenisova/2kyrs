@@ -27,23 +27,21 @@ class Program
     static void Main()
     {
         // Определенный уровень зарплаты
-        decimal salaryThreshold = 50000;
-        
+        decimal salaryThreshold = 65000;
         // Массив для хранения данных о сотрудниках
         Employee[] employees;
-        
         // Чтение данных из файла
-        using (StreamReader reader = new StreamReader("input.txt"))
+        using (StreamReader reader = new StreamReader("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\input.txt"))
         {
             string line;
             int count = int.Parse(reader.ReadLine()); // Первая строка файла содержит количество сотрудников
             employees = new Employee[count];
-            
-            for (int i = 0; i < count; i++)
+
+            for (int i = 1; i < count; i++)
             {
                 line = reader.ReadLine();
                 string[] splitLine = line.Split(';');
-                
+
                 employees[i].FullName = splitLine[0];
                 employees[i].HireYear = int.Parse(splitLine[1]);
                 employees[i].Position = splitLine[2];
@@ -51,12 +49,12 @@ class Program
                 employees[i].WorkExperience = int.Parse(splitLine[4]);
             }
         }
-        
+
         // Сортировка сотрудников по рабочему стажу
         Array.Sort(employees);
-        
+
         // Запись информации о сотрудниках с зарплатой ниже определенного уровня в файл
-        using (StreamWriter writer = new StreamWriter("output.txt"))
+        using (StreamWriter writer = new StreamWriter("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\output.txt"))
         {
             foreach (var employee in employees)
             {
