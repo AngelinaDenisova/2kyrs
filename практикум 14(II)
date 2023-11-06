@@ -7,18 +7,15 @@ using System;
 using System.IO;
 
 // Структура описывающая сотрудника
-struct Employee : IComparable<Employee>
+struct Work : IComparable<Work>
 {
-    public string FullName;
-    public int HireYear;
-    public string Position;
-    public decimal Salary;
-    public int WorkExperience;
+    public string fio, pos;
+    public int year, exp, zp;
 
-    public int CompareTo(Employee other)
+    public int CompareTo(Work other)
     {
-        // Сортировка по рабочему стажу (WorkExperience) по возрастанию
-        return WorkExperience.CompareTo(other.WorkExperience);
+        // Сортировка по рабочему стажу (exp) по возрастанию
+        return exp.CompareTo(other.exp);
     }
 }
 
@@ -27,26 +24,26 @@ class Program
     static void Main()
     {
         // Определенный уровень зарплаты
-        decimal salaryThreshold = 65000;
+        int salary = 65000;
         // Массив для хранения данных о сотрудниках
-        Employee[] employees;
+        Work[] employees;
         // Чтение данных из файла
         using (StreamReader reader = new StreamReader("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\input.txt"))
         {
             string line;
             int count = int.Parse(reader.ReadLine()); // Первая строка файла содержит количество сотрудников
-            employees = new Employee[count];
+            employees = new Work[count];
 
             for (int i = 1; i < count; i++)
             {
                 line = reader.ReadLine();
                 string[] splitLine = line.Split(';');
 
-                employees[i].FullName = splitLine[0];
-                employees[i].HireYear = int.Parse(splitLine[1]);
-                employees[i].Position = splitLine[2];
-                employees[i].Salary = decimal.Parse(splitLine[3]);
-                employees[i].WorkExperience = int.Parse(splitLine[4]);
+                employees[i].fio = splitLine[0];
+                employees[i].year = int.Parse(splitLine[1]);
+                employees[i].pos = splitLine[2];
+                employees[i].zp = int.Parse(splitLine[3]);
+                employees[i].exp = int.Parse(splitLine[4]);
             }
         }
 
@@ -58,9 +55,9 @@ class Program
         {
             foreach (var employee in employees)
             {
-                if (employee.Salary < salaryThreshold)
+                if (employee.zp < salary)
                 {
-                    writer.WriteLine($"ФИО: {employee.FullName}, Год принятия на работу: {employee.HireYear}, Должность: {employee.Position}, Зарплата: {employee.Salary}, Рабочий стаж: {employee.WorkExperience}");
+                    writer.WriteLine($"ФИО: {employee.fio}, Год принятия на работу: {employee.year}, Должность: {employee.pos}, Зарплата: {employee.zp}, Рабочий стаж: {employee.exp}");
                 }
             }
         }
