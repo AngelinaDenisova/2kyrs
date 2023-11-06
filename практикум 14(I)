@@ -31,10 +31,10 @@ namespace ConsoleApp5
                 return;
             }
 
-            Tuple<Point, Point> result = FindFarthestPoints(points);
-            WriteResultToFile(outputFile, result.Item1, result.Item2);
+            List<Tuple<Point, Point>> result = FindFarthestPoints(points);
+            WriteResultToFile(outputFile, result);
 
-            Console.WriteLine("Две самые дальние точки были найдены и сохранены в файл result");
+            Console.WriteLine("Самые дальние точки были найдены и сохранены в файл result");
         }
 
         static List<Point> ReadPointsFromFile(string inputFile) // // Функция для чтения точек из файла
@@ -56,10 +56,10 @@ namespace ConsoleApp5
             return points; // Возвращаем список точек
         }
         // Функция для поиска двух наиболее удаленных точек.
-        static Tuple<Point, Point> FindFarthestPoints(List<Point> points)
+        static List<Tuple<Point, Point>> FindFarthestPoints(List<Point> points)
         {
             double maxDistance = 0; // Максимальное расстояние между точками.
-            Tuple<Point, Point> result = null; // Переменная для хранения результата.
+            List<Tuple<Point, Point>> result = new List<Tuple<Point, Point>>(); // Список для хранения результатов.
 
             for (int i = 0; i < points.Count; i++)
             {
@@ -70,7 +70,12 @@ namespace ConsoleApp5
                     if (distance > maxDistance)
                     {
                         maxDistance = distance;
-                        result = Tuple.Create(points[i], points[j]); /// Обновляем результат с новыми точками.
+                        result.Clear(); // Очищаем список результатов.
+                        result.Add(Tuple.Create(points[i], points[j])); /// Обновляем результат с новыми точками.
+                    }
+                    else if (distance == maxDistance)
+                    {
+                        result.Add(Tuple.Create(points[i], points[j])); // Добавляем точки с одинаковым максимальным расстоянием.
                     }
                 }
             }
@@ -85,12 +90,16 @@ namespace ConsoleApp5
             return Math.Sqrt(dx * dx + dy * dy);
         }
 
-        static void WriteResultToFile(string outputFile, Point p1, Point p2)
+        static void WriteResultToFile(string outputFile, List<Tuple<Point, Point>> result)
         {
             using (StreamWriter writer = new StreamWriter(outputFile))
             {
-                writer.WriteLine($"Точка 1: ({p1.X}, {p1.Y})");
-                writer.WriteLine($"Точка 2: ({p2.X}, {p2.Y})");
+                foreach (var tuple in result)
+                {
+                    writer.WriteLine($"Точка 1: ({tuple.Item1.X}, {tuple.Item1.Y})");
+                    writer.WriteLine($"Точка 2: ({tuple.Item2.X}, {tuple.Item2.Y})");
+                    writer.WriteLine();
+                }
             }
         }
     }
