@@ -1,0 +1,61 @@
+исходная информация хранится в текстовом файле input.txt, каждая строка которого содержит полную информацию о некотором объекте; результирующая информация должна быть записана в файл output.txt.
+2. Для хранения данных внутри программы организовать одномерный массив структур или любую
+другую подходящую коллекцию структур. Выбор коллекции обосновать.
+На основе данных входного файла составить багажную ведомость камеры
+хранения, включив следующие данные: ФИО пассажира, количество вещей, общий вес
+вещей. Вывести в новый файл информацию о тех пассажирах, средний вес багажа которых
+превышает заданный, отсортировав их по количеству вещей, сданных в камеру хранения, используя LINQ-запросы
+
+using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+
+// Определение структуры для хранения информации о багаже
+struct LuggageItem
+{
+    public string PassengerName;
+    public int NumberOfItems;
+    public double TotalWeight;
+}
+
+class Program
+{
+    static void Main()
+    {
+        // Чтение данных из файла input.txt
+        string[] lines = File.ReadAllLines("input.txt");
+        
+        // Создание коллекции структур для хранения данных о багаже
+        List<LuggageItem> luggageItems = new List<LuggageItem>();
+
+        // Заполнение коллекции данными из файла
+        foreach (string line in lines)
+        {
+            string[] parts = line.Split(',');
+            LuggageItem item;
+            item.PassengerName = parts[0];
+            item.NumberOfItems = int.Parse(parts[1]);
+            item.TotalWeight = double.Parse(parts[2]);
+            luggageItems.Add(item);
+        }
+
+        // Вычисление среднего веса багажа
+        double averageWeight = luggageItems.Average(item => item.TotalWeight);
+
+        // LINQ-запрос для выбора пассажиров с средним весом багажа выше среднего
+        var selectedPassengers = from item in luggageItems
+                                 where item.TotalWeight > averageWeight
+                                 orderby item.NumberOfItems
+                                 select item;
+
+        // Запись результатов в файл output.txt
+        using (StreamWriter file = new StreamWriter("output.txt"))
+        {
+            foreach (var passenger in selectedPassengers)
+            {
+                file.WriteLine($"{passenger.PassengerName}, {passenger.NumberOfItems}, {passenger.TotalWeight}");
+            }
+        }
+    }
+}
