@@ -6,50 +6,36 @@ using System.Collections.Generic;
 // Определение структуры для хранения информации о багаже
 struct LuggageItem
 {
-    public string PassengerName;
-    public int NumberOfItems;
-    public double TotalWeight;
+    public string Name; //ФИО пассажира
+    public int Number; //количество вещей
+    public double Weight; //общий вес
 }
 
 class Program
 {
     static void Main()
     {
-        // Чтение данных из файла input.txt
-        string[] lines = File.ReadAllLines("input.txt");
-        
+        string[] lines = File.ReadAllLines("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\bagage.txt");
         // Создание коллекции структур для хранения данных о багаже
         List<LuggageItem> luggageItems = new List<LuggageItem>();
-
         // Заполнение коллекции данными из файла
         foreach (string line in lines)
         {
             string[] parts = line.Split(',');
             LuggageItem item;
-            item.PassengerName = parts[0];
-            item.NumberOfItems = int.Parse(parts[1]);
-            item.TotalWeight = double.Parse(parts[2]);
+            item.Name = parts[0];
+            item.Number = int.Parse(parts[1]);
+            item.Weight = double.Parse(parts[2]);
             luggageItems.Add(item);
         }
-
-        // Вычисление среднего веса багажа
-        double averageWeight = luggageItems.Average(item => item.TotalWeight);
-
-        // LINQ-запрос через методы расширений для выбора пассажиров с средним весом багажа выше среднего и их сортировки
-        var selectedPassengers = luggageItems
-                                .Where(item => item.TotalWeight > averageWeight)
-                                .OrderBy(item => item.NumberOfItems);
-
-        // Запись результатов в файл output.txt
-        using (StreamWriter file = new StreamWriter("output.txt"))
+        double averageWeight = luggageItems.Average(item => item.Weight); //средний вес багажа
+        var selectedPassengers = luggageItems.Where(item => item.Weight > averageWeight).OrderBy(item => item.Number);
+        using (StreamWriter file = new StreamWriter("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\bagage_res.txt"))
         {
             foreach (var passenger in selectedPassengers)
             {
-                file.WriteLine($"{passenger.PassengerName}, {passenger.NumberOfItems}, {passenger.TotalWeight}");
+                file.WriteLine($"{passenger.Name}, {passenger.Number}, {passenger.Weight}");
             }
         }
     }
 }
-```
-
-В этом примере я заменил LINQ-запрос на цепочку методов расширений `Where` и `OrderBy`, что позволяет достичь того же результата, но более компактно.
