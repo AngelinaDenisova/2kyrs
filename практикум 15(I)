@@ -11,19 +11,18 @@ class Program
 {
     static void Main()
     {
-        string[] lines = File.ReadAllLines("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\pr151.txt"); // Замените "input.txt" на имя вашего файла
+        string[] lines = File.ReadAllLines("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\pr151.txt"); //считываем данные из файла в массив строк
 
         var numbers = lines.SelectMany(line => line.Split(' ')) // Разбиваем каждую строку на подстроки
                            .Where(str => !string.IsNullOrEmpty(str)) // Удаляем пустые элементы
                            .Select(int.Parse); // Преобразуем каждую подстроку в число
 
-        var evenPositiveNumbers = numbers.Where(num => num > 0 && num % 2 == 0) // Фильтруем четные положительные числа
+        var res = numbers.Where(num => num > 0 && num % 2 == 0) // Фильтруем четные положительные числа
                                          .OrderBy(num => num); // Сортируем числа по возрастанию
-
         // Записываем отсортированные четные положительные числа в файл
         using (StreamWriter writer = new StreamWriter("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\pr15out.txt"))
         {
-            foreach (var number in evenPositiveNumbers)
+            foreach (var number in res)
             {
                 writer.WriteLine(number); // Записываем число в файл
             }
