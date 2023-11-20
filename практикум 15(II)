@@ -24,7 +24,7 @@ class Program
 {
     static void Main()
     {
-        string[] lines = File.ReadAllLines("input.txt");
+        string[] lines = File.ReadAllLines("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\bagage.txt");
         // Создание коллекции структур для хранения данных о багаже
         List<LuggageItem> luggageItems = new List<LuggageItem>();
 
@@ -48,7 +48,7 @@ class Program
                                  select item;
 
         // Запись результатов в файл output.txt
-        using (StreamWriter file = new StreamWriter("output.txt"))
+        using (StreamWriter file = new StreamWriter("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\bagage_res.txt"))
         {
             foreach (var passenger in selectedPassengers)
             {
@@ -56,4 +56,3 @@ class Program
             }
         }
     }
-}
