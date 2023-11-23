@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -7,33 +6,20 @@ class Program
 {
     static void Main()
     {
-        string[] lines = File.ReadAllLines("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\pr151.txt"); // Замените "input.txt" на имя вашего файла
+        // Чтение данных из файла
+        string[] lines = File.ReadAllLines("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\pr151.txt");
         var numbers = lines.SelectMany(line => line.Split(' ')) // Разбиваем каждую строку на подстроки
-                           .Where(str => !string.IsNullOrEmpty(str)) // Удаляем пустые элементы
-                           .Select(int.Parse); // Преобразуем каждую подстроку в число
-        var res = numbers.sortt(); // Получаем отсортированные четные положительные числа
-
-        res.WriteToFile("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\pr15out.txt"); // Записываем отсортированные четные положительные числа в файл
-
-        Console.WriteLine("Результаты были записаны в файл pr15out.txt");
-    }
-}
-
-public static class EnumerableExtensions
-{
-    public static IEnumerable<int> sortt(this IEnumerable<int> numbers)
-    {
-        return numbers.Where(num => num > 0 && num % 2 == 0) // Фильтруем четные положительные числа
+                          .Where(str => !string.IsNullOrEmpty(str)) // Удаляем пустые элементы
+                          .Select(int.Parse); // Преобразуем каждую подстроку в число
+        var result = numbers.Where(num => num > 0 && num % 2 == 0) // Фильтруем четные положительные числа
                       .OrderBy(num => num); // Сортируем числа по возрастанию
-    }
 
-    public static void WriteToFile(this IEnumerable<int> numbers, string fileName)
-    {
-        using (StreamWriter writer = new StreamWriter(fileName))
+        // Вывод отсортированных четных положительных чисел
+        using (StreamWriter writer = new StreamWriter("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\pr15out.txt"))
         {
-            foreach (var number in numbers)
+            foreach (var number in result)
             {
-                writer.WriteLine(number); // Записываем число в файл
+                writer.WriteLine(number);
             }
         }
     }
