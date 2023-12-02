@@ -7,11 +7,10 @@ class Program
     static void Main()
     {
         // Чтение данных из файла
-        string[] lines = File.ReadAllLines("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\pr151.txt");
-        var numbers = lines.SelectMany(line => line.Split(' ')) // Разбиваем каждую строку на подстроки
-                          .Where(str => !string.IsNullOrEmpty(str)) // Удаляем пустые элементы
-                          .Select(int.Parse); // Преобразуем каждую подстроку в число
-        var result = numbers.Where(num => num > 0 && num % 2 == 0) // Фильтруем четные положительные числа
+        char[] a = new char[] { ' ', '\n', '\t', '\r' };
+        string lines = File.ReadAllText("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\pr151.txt");
+        string[] numbers = lines.Split(a, StringSplitOptions.RemoveEmptyEntries);
+        var result = numbers.Where(num => int.Parse(num) > 0 && int.Parse(num) % 2 == 0) // Фильтруем четные положительные числа
                       .OrderBy(num => num); // Сортируем числа по возрастанию
 
         // Вывод отсортированных четных положительных чисел
