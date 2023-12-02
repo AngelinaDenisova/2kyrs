@@ -1,25 +1,28 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-
-class Program
+namespace ConsoleApp4
 {
-    static void Main()
+    class Program
     {
-        // Чтение данных из файла
-        char[] a = new char[] { ' ', '\n', '\t', '\r' };
-        string lines = File.ReadAllText("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\pr151.txt");
-        string[] numbers = lines.Split(a, StringSplitOptions.RemoveEmptyEntries);
-        var result = numbers.Where(num => int.Parse(num) > 0 && int.Parse(num) % 2 == 0) // Фильтруем четные положительные числа
-                      .OrderBy(num => num); // Сортируем числа по возрастанию
-
-        // Вывод отсортированных четных положительных чисел
-        using (StreamWriter writer = new StreamWriter("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\pr15out.txt"))
+        static void Main()
         {
-            foreach (var number in result)
+            char[] a = new char[] { ' ', '\n', '\t', '\r'};
+            string file1 = File.ReadAllText("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\1.txt");
+            string file2 = File.ReadAllText("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\2.txt");
+            string[] numbers1 = file1.Split(a, StringSplitOptions.RemoveEmptyEntries);
+            string[] numbers2 = file2.Split(a, StringSplitOptions.RemoveEmptyEntries);
+            int length = numbers1.Length;
+            using (StreamWriter newFile = new StreamWriter("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\test.txt", false))
             {
-                writer.WriteLine(number);
-            }
+                for (int i = 0; i < length; i++)
+                {
+                    int k = Math.Max(int.Parse(numbers1[i]), int.Parse(numbers2[i]));
+                    newFile.WriteLine(k);
+                }
+
+                Console.WriteLine("Файл с максимальными компонентами создан.");
         }
     }
+}
 }
