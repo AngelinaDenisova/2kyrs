@@ -11,13 +11,14 @@ class Program
 {
     static void Main()
     {
-        // Чтение данных из файла
-        string[] lines = File.ReadAllLines("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\pr151.txt");
-        int[] numbers = lines.Last().Split(' ', '\t', '\n', '\r').Select(int.Parse).ToArray();
+        char[] a = new char[] { ' ', '\n', '\t', '\r' };
+        string lines = File.ReadAllText("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\pr151.txt");
+        string[] numbers = lines.Split(a, StringSplitOptions.RemoveEmptyEntries);
+        
 
         // LINQ запрос для фильтрации четных положительных чисел и их сортировки
         var result = from number in numbers
-                     where number > 0 && number % 2 == 0
+                     where int.Parse(number) > 0 && int.Parse(number) % 2 == 0
                      orderby number
                      select number;
 
@@ -30,4 +31,3 @@ class Program
             }
         }
     }
-}
