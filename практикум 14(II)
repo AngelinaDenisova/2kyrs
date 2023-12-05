@@ -5,61 +5,75 @@
 // Вывести в новый файл информацию о сотрудниках, имеющих зарплату ниже определенного уровня, отсортировав их по рабочему стажу
 using System;
 using System.IO;
+using System.Net;
 
-// Структура описывающая сотрудника
-struct Work : IComparable<Work>
+namespace ConsoleApp5
 {
-    public string fio, pos;
-    public int year, exp, zp;
-
-    public int CompareTo(Work other)
+    struct Work : IComparable<Work> // Структура описывающая сотрудника
     {
-        // Сортировка по рабочему стажу (exp) по возрастанию
-        return exp.CompareTo(other.exp);
-    }
-}
+        public string Fio, Pos;
+        public int Year, Exp, Zp;
 
-class Program
-{
-    static void Main()
-    {
-        // Определенный уровень зарплаты
-        int salary = 65000;
-        // Массив для хранения данных о сотрудниках
-        Work[] employees;
-        // Чтение данных из файла
-        using (StreamReader reader = new StreamReader("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\input.txt"))
+        public Work(string fio, int year, string pos, int exp, int zp) // конструктор структуры 
         {
-            string line;
-            int count = int.Parse(reader.ReadLine()); // Первая строка файла содержит количество сотрудников
-            employees = new Work[count];
+            Fio = fio;
+            Year = year;
+            Pos = pos;
+            Exp = exp;
+            Zp = zp;
+        }
+        public int CompareTo(Work other)
+        {
+            return Exp.CompareTo(other.Exp);  // Сортировка по рабочему стажу (exp) по возрастанию
+        }
+    }
 
-            for (int i = 1; i < count; i++)
+    class Program
+    {
+        static Work[] Input()
+        {
+            string[] lines = File.ReadAllLines("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\input.txt");
+            Work[] employees = new Work[lines.Length];
+
+            for (int i = 0; i < lines.Length; i++)
             {
-                line = reader.ReadLine();
-                string[] splitLine = line.Split(';');
+                string[] workInfo = lines[i].Split(';');
+                string fio = workInfo[0];
+                int year = int.Parse(workInfo[1]);
+                string pos = workInfo[2];
+                int exp = int.Parse(workInfo[3]);
+                int zp = int.Parse(workInfo[4]);
 
-                employees[i].fio = splitLine[0];
-                employees[i].year = int.Parse(splitLine[1]);
-                employees[i].pos = splitLine[2];
-                employees[i].zp = int.Parse(splitLine[3]);
-                employees[i].exp = int.Parse(splitLine[4]);
+                employees[i] = new Work(fio, year, pos, exp, zp);
             }
+            return employees;
         }
 
-        // Сортировка сотрудников по рабочему стажу
-        Array.Sort(employees);
-
-        // Запись информации о сотрудниках с зарплатой ниже определенного уровня в файл
-        using (StreamWriter writer = new StreamWriter("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\output.txt"))
+        static Work[] FilterByZp(Work[] employees, int zp)
         {
-            foreach (var employee in employees)
+            return Array.FindAll(employees, s => s.Zp < zp);
+        }
+
+        static void Output(Work[] employees)
+        {
+            using (StreamWriter fileOut = new StreamWriter("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\output.txt"))
             {
-                if (employee.zp < salary)
+                foreach (Work employ in employees)
                 {
-                    writer.WriteLine($"ФИО: {employee.fio}, Год принятия на работу: {employee.year}, Должность: {employee.pos}, Зарплата: {employee.zp}, Рабочий стаж: {employee.exp}");
+                    fileOut.WriteLine($"{employ.Fio}; {employ.Year}; {employ.Pos}; {employ.Exp}; {employ.Zp}");
                 }
             }
+        }
+        static void Main()
+        {
+            Work[] employees = Input();
+            Array.Sort(employees);
+
+            Console.WriteLine("Введите уровень зарплаты ");
+            int ZpToFind = int.Parse(Console.ReadLine());
+
+            Work[] filteredEmployees = FilterByZp(employees, ZpToFind);
+            Output(filteredEmployees);
         }
     }
 }
