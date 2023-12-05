@@ -4,40 +4,24 @@ using System.IO;
 using System.Collections.Generic;
 namespace ConsoleApp5
 {
-    //// Структура Point для хранения координат точек на плоскости
-    struct Point
+    struct Point // Структура Point для хранения координат точек на плоскости
     {
-        public double X;
-        public double Y;
-
+        public double x;
+        public double y;
         public Point(double x, double y)
         {
-            X = x;
-            Y = y;
+            this.x = x;
+            this.y = y;
+        }
+        public void Show()
+        {
+            Console.WriteLine("({0}, {1})", x, y);
         }
     }
 
     class Program
     {
-        static void Main()
-        {
-            string inputFile = "C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\points.txt";
-            string outputFile = "C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\result.txt";
-
-            List<Point> points = ReadPointsFromFile(inputFile); //// Считываем точки из файла в список
-            if (points.Count < 2)
-            {
-                Console.WriteLine("Недостаточно точек в файле.");
-                return;
-            }
-
-            List<Tuple<Point, Point>> result = FindFarthestPoints(points);
-            WriteResultToFile(outputFile, result);
-
-            Console.WriteLine("Самые дальние точки были найдены и сохранены в файл result");
-        }
-
-        static List<Point> ReadPointsFromFile(string inputFile) // // Функция для чтения точек из файла
+        static List<Point> ReadPoints(string inputFile) // // Функция для чтения точек из файла
         {
             List<Point> points = new List<Point>();
 
@@ -52,11 +36,10 @@ namespace ConsoleApp5
                         points.Add(new Point(x, y)); // Создаем новую точку и добавляем ее в список точек.
                 }
             }
-
             return points; // Возвращаем список точек
         }
-        // Функция для поиска двух наиболее удаленных точек.
-        static List<Tuple<Point, Point>> FindFarthestPoints(List<Point> points)
+
+        static List<Tuple<Point, Point>> FindPoint(List<Point> points) //Функция для поиска двух наиболее удаленных точек.
         {
             double maxDistance = 0; // Максимальное расстояние между точками.
             List<Tuple<Point, Point>> result = new List<Tuple<Point, Point>>(); // Список для хранения результатов.
@@ -65,7 +48,7 @@ namespace ConsoleApp5
             {
                 for (int j = i + 1; j < points.Count; j++)
                 {
-                    double distance = CalculateDistance(points[i], points[j]); // Вычисляем расстояние между двумя точками.
+                    double distance = Dis(points[i], points[j]); // Вычисляем расстояние между двумя точками.
 
                     if (distance > maxDistance)
                     {
@@ -79,28 +62,37 @@ namespace ConsoleApp5
                     }
                 }
             }
-
             return result;
         }
-
-        static double CalculateDistance(Point p1, Point p2) //   // Функция для вычисления расстояния между двумя точками
+        static double Dis(Point p1, Point p2)   // Функция для вычисления расстояния между двумя точками
         {
-            double dx = p1.X - p2.X;
-            double dy = p1.Y - p2.Y;
+            double dx = p2.x - p1.x;
+            double dy = p2.y - p1.y;
             return Math.Sqrt(dx * dx + dy * dy);
         }
 
-        static void WriteResultToFile(string outputFile, List<Tuple<Point, Point>> result)
+        static void Res(string outputFile, List<Tuple<Point, Point>> result) //Функция записи точек с наиб.расстоянием в файл
         {
             using (StreamWriter writer = new StreamWriter(outputFile))
             {
                 foreach (var tuple in result)
                 {
-                    writer.WriteLine($"Точка 1: ({tuple.Item1.X}, {tuple.Item1.Y})");
-                    writer.WriteLine($"Точка 2: ({tuple.Item2.X}, {tuple.Item2.Y})");
+                    writer.Write($"({tuple.Item1.x}, {tuple.Item1.y}) ");
+                    writer.WriteLine($"({tuple.Item2.x}, {tuple.Item2.y})");
                     writer.WriteLine();
                 }
             }
+        }
+        static void Main()
+        {
+            string inputFile = "C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\points.txt";
+            string outputFile = "C:\\Users\\gelya\\OneDrive\\Рабочий стол\\сиакод\\result.txt";
+
+            List<Point> points = ReadPoints(inputFile); //// Считываем точки из файла в список
+            List<Tuple<Point, Point>> result = FindPoint(points);
+            Res(outputFile, result);
+
+            Console.WriteLine("Самые дальние точки были найдены и сохранены в файл result");
         }
     }
 }
