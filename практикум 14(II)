@@ -24,7 +24,18 @@ namespace ConsoleApp5
         }
         public int CompareTo(Work other)
         {
-            return Exp.CompareTo(other.Exp);  // Сортировка по рабочему стажу (exp) по возрастанию
+            if (this.Exp == other.Exp)
+            {
+                return 0;
+            }
+            else if (this.Exp < other.Exp)
+            {
+                return -1;
+            }
+            else
+            {
+            return 1;
+            }
         }
     }
 
