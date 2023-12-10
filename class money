@@ -130,3 +130,38 @@ namespace ConsoleApp6
     }
 }
 
+///main 
+class Program
+{
+    static void Main(string[] args)
+    {
+        Money money = new Money();
+        Console.Write("Введите номинал купюры: ");
+        int first = int.Parse(Console.ReadLine());
+
+        Console.Write("Введите количество купюр: ");
+        int second = int.Parse(Console.ReadLine());
+
+        money[0] = first;
+        money[1] = second;
+
+        Console.Write("Введите сумму для проверки: ");
+        int n = int.Parse(Console.ReadLine());
+
+        money.Denomination(first); //метод для вывода номинала
+        money.Quantity(second); //метод для вывода количества купюр
+        money.Exam(first, second, n); //хватит ли денежных средств на покупку товара на сумму N рублей
+        money.Counts(first, second, n); //сколько штук товара стоимости n рублей можно купить на имеющиеся деньги
+        Console.WriteLine("Номинал купюры: {0}, количество купюр: {1}", money[0], money[1]); //индексатор
+
+        money++;
+        Console.WriteLine($"Номинал: {first}, Количество: {second}");
+
+        money--;
+        Console.WriteLine($"Номинал: {first}, Количество: {second}");
+
+        Console.WriteLine("Поле second не нулевое? " + !money);
+        money += 3;
+        Console.WriteLine($"Номинал: {first}, Количество: {second}");
+    }
+}
