@@ -1,0 +1,132 @@
+using ConsoleApp6;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace ConsoleApp6
+{
+    internal class Money
+    {
+        private int first;//номинал купюры
+        private int second; //количество купюр
+        public Money() { } //пустой конструктор
+        public Money(int first, int second) //констурктор
+        {
+            this.first = first;
+            this.second = second;
+        }
+        public Money(Money other) //конструктор копирования
+        {
+            this.first = other.first;
+            this.second = other.second;
+        }
+        public void Denomination(int first) //метод для вывода номинала купюр
+        {
+            if (first == 1000 || first == 5000 || first == 50 || first == 100 || first == 200 || first == 2000)
+                Console.WriteLine("Номинал купюры: {0}", first);
+            else
+                Console.WriteLine("Неверный номинал");
+        }
+        public void Quantity(int second) //метод для вывода количества купюр
+        {
+            Console.WriteLine("Количество купюр: {0}", second);
+        }
+        public void Exam(int first, int second, int n) //хватит ли денежных средств на покупку товара на сумму N рублей
+        {
+            if (first * second >= n)
+                Console.WriteLine("Денежных средств хватает");
+            else
+                Console.WriteLine("Денежных средств не хватает");
+        }
+        public void Counts(int first, int second, int n) //сколько штук товара стоимости n рублей можно купить на имеющиеся деньги
+        {
+            int sum = first * second; //сумма денежных средств
+            int k = sum / n; //количество товаров, которые можно купить
+            Console.WriteLine("На {0} рублей можно купить {1} товаров", sum, k);
+        }
+        public int First //свойство для обращения к закрытому полю first
+        {
+            get
+            {
+                return first;
+            }
+            set
+            {
+                first = value;
+            }
+        }
+        public int Second //свойство для обращения к полю second
+        {
+            get
+            {
+                return second;
+            }
+            set
+            {
+                second = value;
+            }
+        }
+        public int this[int i] //индексатор
+        {
+            get
+            {
+                if (i == 0)
+                {
+                    return this.first;
+                }
+                else if (i == 1)
+                {
+                    return this.second;
+                }
+                else
+                {
+                    Console.WriteLine("Недопустимый индекс");
+                    return 0;
+                }
+            }
+            set
+            {
+                if (i == 0)
+                {
+                    this.first = value;
+                }
+                else if (i == 1)
+                {
+                    this.second = value;
+                }
+                else
+                {
+                    Console.WriteLine("Недопустимый индекс");
+                }
+            }
+        }
+        public static Money operator ++(Money money)
+        {
+            money.first++;
+            money.second++;
+            return money;
+        }
+
+        public static Money operator --(Money money)
+        {
+            money.first--;
+            money.second--;
+            return money;
+        }
+
+        public static bool operator !(Money money)
+        {
+            return money.second != 0;
+        }
+        public static Money operator +(Money money, int scalar)
+        {
+            money.second += scalar;
+            return money;
+        }
+    }
+}
+
