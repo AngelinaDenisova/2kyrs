@@ -11,8 +11,8 @@ namespace ConsoleApp6
 {
     internal class Money
     {
-        private int first;//номинал купюры
-        private int second; //количество купюр
+        public int first;//номинал купюры
+        public int second; //количество купюр
         public Money() { } //пустой конструктор
         public Money(int first, int second) //констурктор
         {
@@ -104,64 +104,70 @@ namespace ConsoleApp6
                 }
             }
         }
-        public static Money operator ++(Money money)
+        public static Money operator ++(Money money) //перегрузка ++ (увеличение first и second)
         {
-            money.first++;
-            money.second++;
-            return money;
+            return new Money(money.first + 1, money.second + 1);
         }
 
-        public static Money operator --(Money money)
+        public static Money operator --(Money money) //перегрузка -- (уменьшение first и second)
         {
-            money.first--;
-            money.second--;
-            return money;
+            return new Money(money.first - 1, money.second - 1);
         }
 
-        public static bool operator !(Money money)
+        public static bool operator !(Money money) //true, если second не нулевое, иначе false;
         {
             return money.second != 0;
         }
-        public static Money operator +(Money money, int scalar)
+        public static Money operator +(Money money, int scalar) //добавляет к second значение скаляра.
         {
-            money.second += scalar;
-            return money;
+            return new Money(money.first, money.second + scalar);
+        }
+        public static Money operator +(int scalar, Money money) //добавляет к second значение скаляра.
+        {
+            return new Money(money.first, money.second + scalar);
         }
     }
 }
 
 ///main 
-class Program
+namespace ConsoleApp6
 {
-    static void Main(string[] args)
+    class Program
     {
-        Money money = new Money();
-        Console.Write("Введите номинал купюры: ");
-        int first = int.Parse(Console.ReadLine());
+        static void Main(string[] args)
+        {
+            Money money = new Money();
+            Console.Write("Введите номинал купюры: ");
+            int first = int.Parse(Console.ReadLine());
 
-        Console.Write("Введите количество купюр: ");
-        int second = int.Parse(Console.ReadLine());
+            Console.Write("Введите количество купюр: ");
+            int second = int.Parse(Console.ReadLine());
 
-        money[0] = first;
-        money[1] = second;
+            money[0] = first;
+            money[1] = second;
 
-        Console.Write("Введите сумму для проверки: ");
-        int n = int.Parse(Console.ReadLine());
+            Console.Write("Введите сумму для проверки: ");
+            int n = int.Parse(Console.ReadLine());
 
-        money.Denomination(first); //метод для вывода номинала
-        money.Quantity(second); //метод для вывода количества купюр
-        money.Exam(first, second, n); //хватит ли денежных средств на покупку товара на сумму N рублей
-        money.Counts(first, second, n); //сколько штук товара стоимости n рублей можно купить на имеющиеся деньги
-        Console.WriteLine("Номинал купюры: {0}, количество купюр: {1}", money[0], money[1]); //индексатор
+            money.Denomination(first); //метод для вывода номинала
+            money.Quantity(second); //метод для вывода количества купюр
+            money.Exam(first, second, n); //хватит ли денежных средств на покупку товара на сумму N рублей
+            money.Counts(first, second, n); //сколько штук товара стоимости n рублей можно купить на имеющиеся деньги
+            Console.WriteLine("Номинал купюры: {0}, количество купюр: {1}", money[0], money[1]); //индексатор
 
-        money++;
-        Console.WriteLine($"Номинал: {first}, Количество: {second}");
+            Money money2 = ++money;
+            Console.WriteLine($"Перегрузка ++: Номинал: {money2.first}, Количество: {money2.second}");
 
-        money--;
-        Console.WriteLine($"Номинал: {first}, Количество: {second}");
+            Money money3 = --money;
+            Console.WriteLine($"Перегрузка --: Номинал: {money3.first}, Количество: {money3.second}");
 
-        Console.WriteLine("Поле second не нулевое? " + !money);
-        money += 3;
-        Console.WriteLine($"Номинал: {first}, Количество: {second}");
+            Console.WriteLine("Поле second не нулевое? " + !money);
+
+            Money money4 = money + 5;
+            Console.WriteLine($"Перегрузка +: Номинал: {money4.first}, Количество: {money4.second}");
+
+            Money money5 = 5 + money;
+            Console.WriteLine($"Перегрузка +: Номинал: {money5.first}, Количество: {money5.second}");
+        }
     }
 }
