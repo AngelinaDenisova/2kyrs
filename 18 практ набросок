@@ -1,0 +1,182 @@
+using System;
+using System.IO;
+
+namespace PublishingHouse
+{
+    // Абстрактный класс Издание
+    abstract class Edition
+    {
+        protected string title; // название издания
+        protected string author; // фамилия автора
+
+        // Конструктор
+        public Edition(string title, string author)
+        {
+            this.title = title;
+            this.author = author;
+        }
+
+        // Метод для вывода информации об издании
+        public virtual void PrintInfo()
+        {
+            Console.WriteLine("Название: " + title);
+            Console.WriteLine("Автор: " + author);
+        }
+
+        // Абстрактный метод для проверки, является ли издание искомым
+        public abstract bool IsSearched(string searchKey);
+    }
+
+    // Класс Книга
+    class Book : Editionк
+    {
+        private int year; // год издания
+        private string publisher; // издательство
+
+        // Конструктор
+        public Book(string title, string author, int year, string publisher)
+            : base(title, author)
+        {
+            this.year = year;
+            this.publisher = publisher;
+        }
+
+        // Переопределение метода для вывода информации о книге
+        public override void PrintInfo()
+        {
+            base.PrintInfo();
+            Console.WriteLine("Год издания: " + year);
+            Console.WriteLine("Издательство: " + publisher);
+        }
+
+        // Реализация абстрактного метода для проверки, является ли книга искомой
+        public override bool IsSearched(string searchKey)
+        {
+            return author.Equals(searchKey);
+        }
+    }
+
+    // Класс Статья
+    class Article : Edition
+    {
+        private string journal; // название журнала
+        private int number; // номер журнала
+        private int year; // год издания
+
+        // Конструктор
+        public Article(string title, string author, string journal, int number, int year)
+            : base(title, author)
+        {
+            this.journal = journal;
+            this.number = number;
+            this.year = year;
+        }
+
+        // Переопределение метода для вывода информации о статье
+        public override void PrintInfo()
+        {
+            base.PrintInfo();
+            Console.WriteLine("Название журнала: " + journal);
+            Console.WriteLine("Номер журнала: " + number);
+            Console.WriteLine("Год издания: " + year);
+        }
+
+        // Реализация абстрактного метода для проверки, является ли статья искомой
+        public override bool IsSearched(string searchKey)
+        {
+            return author.Equals(searchKey);
+        }
+    }
+
+    // Класс Электронный ресурс
+    class ElectronicResource : Edition
+    {
+        private string link; // ссылка
+        private string annotation; // аннотация
+
+        // Конструктор
+        public ElectronicResource(string title, string author, string link, string annotation)
+            : base(title, author)
+        {
+            this.link = link;
+            this.annotation = annotation;
+        }
+
+        // Переопределение метода для вывода информации об электронном ресурсе
+        public override void PrintInfo()
+        {
+            base.PrintInfo();
+            Console.WriteLine("Ссылка: " + link);
+            Console.WriteLine("Аннотация: " + annotation);
+        }
+
+        // Реализация абстрактного метода для проверки, является ли электронный ресурс искомым
+        public override bool IsSearched(string searchKey)
+        {
+            return author.Equals(searchKey);
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Чтение данных из файла
+            string[] lines = File.ReadAllLines("publications.txt");
+
+            // Создание массива изданий
+            Edition[] catalog = new Edition[lines.Length];
+
+            // Заполнение массива изданиями
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string[] data = lines[i].Split(';');
+                string type = data[0];
+                string title = data[1];
+                string author = data[2];
+
+                if (type == "Книга")
+                {
+                    int year = int.Parse(data[3]);
+                    string publisher = data[4];
+                    catalog[i] = new Book(title, author, year, publisher);
+                }
+                else if (type == "Статья")
+                {
+                    string journal = data[3];
+                    int number = int.Parse(data[4]);
+                    int year = int.Parse(data[5]);
+                    catalog[i] = new Article(title, author, journal, number, year);
+                }
+                else if (type == "Электронный ресурс")
+                {
+                    string link = data[3];
+                    string annotation = data[4];
+                    catalog[i] = new ElectronicResource(title, author, link, annotation);
+                }
+            }
+
+            // Вывод полной информации из каталога
+            Console.WriteLine("Каталог изданий:");
+            for (int i = 0; i < catalog.Length; i++)
+            {
+                Console.WriteLine("--------------------");
+                catalog[i].PrintInfo();
+            }
+
+            // Поиск изданий по фамилии автора
+            Console.WriteLine("Введите фамилию автора для поиска:");
+            string searchKey = Console.ReadLine();
+
+            Console.WriteLine("Результаты поиска:");
+            for (int i = 0; i < catalog.Length; i++)
+            {
+                if (catalog[i].IsSearched(searchKey))
+                {
+                    Console.WriteLine("--------------------");
+                    catalog[i].PrintInfo();
+                }
+            }
+        }
+    }
+}
