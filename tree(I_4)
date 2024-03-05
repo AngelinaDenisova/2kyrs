@@ -1,0 +1,99 @@
+using System;
+using System.IO;
+
+public class BinaryTree //класс, реализующий АТД «дерево бинарного поиска»
+{
+    //вложенный класс, отвечающий за узлы и операции допустимы для дерева бинарного
+    //поиска
+    private class Node
+    {
+        public object inf; //информационное поле
+        public Node left; //ссылка на левое поддерево
+        public Node rigth; //ссылка на правое поддерево
+        //конструктор вложенного класса, создает узел дерева
+        public Node(object nodeInf)
+        {
+            inf = nodeInf;
+            left = null;
+            rigth = null;
+        }
+        //добавляет узел в дерево так, чтобы дерево оставалось деревом бинарного поиска
+        public static void Add(ref Node r, object nodeInf)
+        {
+            if (r == null)
+            {
+                r = new Node(nodeInf);
+            }
+            else
+            {
+                if (((IComparable)(r.inf)).CompareTo(nodeInf) > 0)
+                {
+                    Add(ref r.left, nodeInf);
+                }
+                else
+                {
+                    Add(ref r.rigth, nodeInf);
+                }
+            }
+        }
+    }
+
+    private Node tree; //ссылка на корень дерева
+
+    public BinaryTree() //открытый конструктор
+    {
+        tree = null;
+    }
+
+    public void Add(object nodeInf) //добавление узла в дерево
+    {
+        Node.Add(ref tree, nodeInf);
+    }
+
+    public double FindAverage() //вычисление среднего арифметического
+    {
+        int sum = 0;
+        int count = 0;
+        SumAndCount(tree, ref sum, ref count);
+        if (count > 0)
+        {
+            return (double)sum / count;
+        }
+        else
+        {
+            return 0.0; // если нет положительных значений, среднее арифметическое будет 0
+        }
+    }
+
+    private void SumAndCount(Node node, ref int sum, ref int count) //подсчет суммы и кол-ва элементов
+    {
+        if (node != null)
+        {
+            dynamic value = node.inf;
+            if (value > 0)
+            {
+                sum += value;
+                count++;
+            }
+            SumAndCount(node.left, ref sum, ref count);
+            SumAndCount(node.rigth, ref sum, ref count);
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        BinaryTree tree = new BinaryTree();
+        string[] lines = File.ReadAllLines("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\СИаКОД\\input.txt");
+        foreach (string line in lines)
+        {
+            int number = int.Parse(line);
+            tree.Add(number);
+        }
+
+        double average = tree.FindAverage();
+        Console.WriteLine("Среднее арифметическое положительных значений узлов дерева: " + average);
+    }
+}
