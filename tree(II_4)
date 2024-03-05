@@ -1,0 +1,109 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+public class BinaryTree //класс, реализующий АТД «дерево бинарного поиска»
+{
+    //вложенный класс, отвечающий за узлы и операции допустимы для дерева бинарного
+    //поиска
+    private class Node
+    {
+        public object inf; //информационное поле
+        public Node left; //ссылка на левое поддерево
+        public Node rigth; //ссылка на правое поддерево
+
+        //конструктор вложенного класса, создает узел дерева
+        public Node(object nodeInf)
+        {
+            inf = nodeInf;
+            left = null;
+            rigth = null;
+        }
+
+        //добавляет узел в дерево так, чтобы дерево оставалось деревом бинарного поиска
+        public static void Add(ref Node r, object nodeInf)
+        {
+            if (r == null)
+            {
+                r = new Node(nodeInf);
+            }
+            else
+            {
+                if (((IComparable)(r.inf)).CompareTo(nodeInf) > 0)
+                {
+                    Add(ref r.left, nodeInf);
+                }
+                else
+                {
+                    Add(ref r.rigth, nodeInf);
+                }
+            }
+        }
+    }
+
+    private Node tree; //ссылка на корень дерева
+
+    public BinaryTree() //открытый конструктор
+    {
+        tree = null;
+    }
+
+    public void Add(object nodeInf) //добавление узла в дерево
+    {
+        Node.Add(ref tree, nodeInf);
+    }
+
+    // Выводит все узлы на заданной высоте
+    public void PrintNodes(int height)
+    {
+        if (tree == null)
+        {
+            Console.WriteLine("Дерево пусто");
+            return;
+        }
+        Console.WriteLine($"Узлы на высоте {height}:");
+        PrintNodes(tree, 1, height);
+    }
+
+    // Рекурсивный метод для вывода узлов на заданной высоте
+    private void PrintNodes(Node node, int currentHeight, int targetHeight)
+    {
+        if (node == null)
+        {
+            return;
+        }
+        if (currentHeight == targetHeight)
+        {
+            Console.WriteLine(node.inf);
+        }
+        else if (currentHeight < targetHeight)
+        {
+            PrintNodes(node.left, currentHeight + 1, targetHeight);
+            PrintNodes(node.rigth, currentHeight + 1, targetHeight);
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        BinaryTree tree = new BinaryTree();
+        string[] lines = File.ReadAllLines("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\СИаКОД\\input.txt");
+        foreach (string line in lines)
+        {
+            int number = int.Parse(line);
+            tree.Add(number);
+        }
+
+        Console.Write("Введите высоту, для которой хотите найти узлы: ");
+        if (int.TryParse(Console.ReadLine(), out int height))
+        {
+            tree.PrintNodes(height);
+        }
+        else
+        {
+            Console.WriteLine("Вы ввели некорректное значение высоты.");
+        }
+    }
+}
