@@ -1,27 +1,31 @@
 //проверить, является ли дерево идеально сбалансированным
-using System;
-using System.IO;
 
-namespace tree_1_4
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace tree_3
 {
-    public class BinaryTree //класс, реализующий АТД «дерево бинарного поиска со счетчиком вершин в дереве»
+    public class BinaryTree // класс, реализующий АТД «дерево бинарного поиска со счетчиком вершин в дереве»
     {
-        private class Node  //вложенный класс, отвечающий за узлы и операции допустимы для дерева бинарного поиска
+        private class Node // вложенный класс, отвечающий за узлы и операции, допустимые для дерева бинарного поиска
         {
             public object inf;
             public int counter;
             public Node left;
-            public Node rigth;
+            public Node right;
 
-            public Node(object nodeInf) //конструктор вложенного класса, создает узел дерева
+            public Node(object nodeInf) // конструктор вложенного класса, создает узел дерева
             {
                 inf = nodeInf;
                 counter = 1;
                 left = null;
-                rigth = null;
+                right = null;
             }
 
-            public static void Add(ref Node r, object nodeInf) //добавляет узел в дерево так, чтобы дерево оставалось деревом бинарного поиска
+            public static void Add(ref Node r, object nodeInf) // добавляет узел в дерево так, чтобы дерево оставалось деревом бинарного поиска
             {
                 if (r == null)
                 {
@@ -36,24 +40,25 @@ namespace tree_1_4
                     }
                     else
                     {
-                        Add(ref r.rigth, nodeInf);
+                        Add(ref r.right, nodeInf);
                     }
                 }
-            } 
-            public static void Preorder(Node r)	//прямой обход дерева
+            }
+
+            public static void Preorder(Node r) // прямой обход дерева
             {
                 if (r != null)
                 {
                     Console.Write("({0}, {1}) ", r.inf, r.counter);
                     Preorder(r.left);
-                    Preorder(r.rigth);
+                    Preorder(r.right);
                 }
             }
-
         }
 
         private Node root;
-        //свойство позволяет получить доступ к значению информационного поля корня дерева 
+
+        // свойство позволяет получить доступ к значению информационного поля корня дерева
         public object Inf
         {
             set { root.inf = value; }
@@ -63,18 +68,19 @@ namespace tree_1_4
         public int Counter
         {
             get { return root.counter; }
-
         }
-        public BinaryTree()	//открытый конструктор
+
+        public BinaryTree() // открытый конструктор
         {
             root = null;
         }
 
-        private BinaryTree(Node r) //закрытый конструктор
+        private BinaryTree(Node r) // закрытый конструктор
         {
             root = r;
         }
-        public void Add(object nodeInf)	//добавление узла в дерево
+
+        public void Add(object nodeInf) // добавление узла в дерево
         {
             Node.Add(ref root, nodeInf);
         }
@@ -84,52 +90,61 @@ namespace tree_1_4
             return CheckBalance(root) != -1;
         }
 
-        //организация различных способов обхода дерева
+
+        // организация различных способов обхода дерева
         public void Preorder()
         {
             Node.Preorder(root);
-        } 
-        private int CheckBalance(Node node) //проверка сбалансированности
+        }
+
+        private int CheckBalance(Node node)
         {
             if (node == null) // Если текущий узел равен null, то мы считаем, что его высота равна 0, и возвращаем 0.
             {
                 return 0;
             }
 
-            int leftHeight = CheckBalance(node.left); //вызываем рекурсивно метод CheckBalance для левого поддерева и сохраняем его высоту в переменной leftHeight
-            if (leftHeight == -1) //Если leftHeight равно - 1, это означает, что левое поддерево не сбалансировано, и мы возвращаем -1
+            int leftCount = GetCount(node.left); // вызываем метод GetCount для левого поддерева и сохраняем количество узлов в нем в переменной leftCount
+            int rightCount = GetCount(node.right); // по аналогии для правого
+
+            if (Math.Abs(leftCount - rightCount) > 1) // проверяем условие идеальной сбалансированности
             {
                 return -1;
             }
 
-            int rightHeight = CheckBalance(node.rigth); //по аналогии для правого
-            if (rightHeight == -1)
+            int leftResult = CheckBalance(node.left); // проверяем идеальную сбалансированность для левого поддерева
+            int rightResult = CheckBalance(node.right); // аналогично для правого
+
+            if (leftResult == -1 || rightResult == -1) // если хотя бы одно поддерево не идеально сбалансировано, возвращаем -1
             {
                 return -1;
             }
 
-            if (Math.Abs(leftHeight - rightHeight) > 1) //проверяем разницу между leftHeight и rightHeight.Если эта разница больше 1, то поддерево не сбалансировано
-            {
-                return -1;
-            }
+            return 1 + Math.Max(leftResult, rightResult); // иначе возвращаем количество узлов в текущем поддереве
+        }
 
-            return Math.Max(leftHeight, rightHeight) + 1;
+        private int GetCount(Node node)
+        {
+            if (node == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return node.counter; // возвращаем количество узлов в поддереве, хранящееся в узле
+            }
         }
     }
 }
 
 
-
-
-
-
-class Program
+        class Program
 {
     static void Main()
     {
         BinaryTree tree = new BinaryTree();	//инициализируем дерево
         //на основе данных файла создаем дерево
-        using (StreamReader fileIn = new StreamReader("C:\\Users\\gelya\\OneDrive\\Рабочий стол\\СИаКОД\\input.txt"))
+        using (StreamReader fileIn = new StreamReader("D:\\СИаКОД\\input.txt"))
         {
             string line = fileIn.ReadToEnd();
             string[] data = line.Split(' ');
@@ -144,6 +159,6 @@ class Program
 
         bool isBalanced = tree.IsPerfectlyBalanced();
         Console.WriteLine($"Дерево идеально сбалансировано: {isBalanced}");
-
     }
+
 }
